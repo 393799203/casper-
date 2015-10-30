@@ -55,6 +55,6 @@ function getFiles(){
 }
 
 function logDate(flag){
-    var filePath = nowPath + '/logDate.log';
+    var filePath = nowPath + '/logData.log';
     fs.appendFile(filePath,flag+" "+new Date()+"\n");
 }
