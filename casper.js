@@ -2,7 +2,7 @@ var utils = require("utils");
 
 var fs = require("fs");
 
-var _ = require("underscore")._;
+// var _ = require("underscore")._;
 
 var casper = require("casper").create({
     pageSettings:{
@@ -29,11 +29,12 @@ var needRewrite = true;
 var writeText = '';
 
 casper.getContent = function(response){
-    this.wait(2000,function(){
+    this.wait(5000,function(){
         var pageSize = this.getPageContent().length;
         if(needRewrite){
             var writeObject = {
                 url : response.url,
+                title : this.page.title,
                 size : pageSize
             }
             writeText += JSON.stringify(writeObject)+'\n';
@@ -51,23 +52,24 @@ casper.checkPageSize = function(response,pageSize){
 
     if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
+        this.savePicture();
     }else{
         this.throwError(response);
     }
 }
 
 casper.savePicture = function(){
-    this.capture('./errorImage/'+this.page.title, undefined,{
+    this.capture('./errorImage/'+this.page.title + new Date(), undefined,{
         format: 'jpg',
         quality: 60
     });
 }
 
 casper.throwError = function(response){
+
     this.savePicture();
     //请求
     
-
 }
 
 casper.checkPage = function(response) {
