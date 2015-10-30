@@ -47,9 +47,9 @@ casper.checkPageSize = function(response,pageSize){
 
     var normalObject = JSON.parse(PageInfo[response.index]);
 
-    console.log(pageSize,normalObject['size']* 0.8);
+    console.log(pageSize,normalObject['size']* 0.9);
 
-    if(pageSize > normalObject['size'] * 0.8){
+    if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
     }else{
         this.throwError(response);
