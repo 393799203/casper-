@@ -29,7 +29,7 @@ var needRewrite = true;
 var writeText = '';
 
 casper.getContent = function(response){
-    this.wait(5000,function(){
+    this.wait(2000,function(){
         var pageSize = this.getPageContent().length;
         if(needRewrite){
             var writeObject = {

@@ -9,6 +9,7 @@
   "author": "qingmeng",
   "license": "ISC",
   "dependencies": {
-    "node-schedule": "^0.2.9"
+    "node-schedule": "^0.2.9",
+    "underscore": "^1.8.3"
   }
 }
