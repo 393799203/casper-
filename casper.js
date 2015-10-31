@@ -52,7 +52,7 @@ casper.checkPageSize = function(response,pageSize){
 
     if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
-        this.savePicture();
+        this.savePicture();//注释掉，页面正常不用截图
     }else{
         this.throwError(response);
     }
