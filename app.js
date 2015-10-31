@@ -49,7 +49,7 @@ function curl(){
 }
 
 function getFiles(){
-	var filePath = path.join(nowPath,"files","fileList.js");
+	var filePath = path.join(nowPath,"files","fileList_pre1.js");
 	var fileList = fs.readFileSync(filePath,"UTF-8").split('\n');
 	return fileList;
 }

@@ -6,13 +6,13 @@ var fs = require("fs");
 
 var casper = require("casper").create({
     pageSettings:{
-        loadImages:  true,        
+        loadImages:  false,        
         loadPlugins: true,
         userAgent:'mogujie'
     },
     logLevel: "debug",   // Only "info" level messages will be logged
     verbose: true,
-    //viewportSize:{width: 1200, height: 800},
+    viewportSize:{width: 1200, height: 800},
     waitTimeout:40000
 });
 
@@ -85,7 +85,6 @@ casper.checkAjax = function(response){
     
     this.waitFor(function(){
         return this.evaluate(function(){
-            console.log(document.getElementsByClassName('iwf').length);
             return document.getElementsByClassName('iwf').length > 40;
         });
     }); 
