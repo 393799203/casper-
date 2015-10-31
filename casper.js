@@ -6,7 +6,7 @@ var fs = require("fs");
 
 var casper = require("casper").create({
     pageSettings:{
-        loadImages:  false,        
+        loadImages:  true,        
         loadPlugins: true,
         userAgent:'mogujie'
     },
