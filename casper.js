@@ -12,7 +12,7 @@ var casper = require("casper").create({
     },
     logLevel: "debug",   // Only "info" level messages will be logged
     verbose: true,
-    viewportSize:{width: 1366, height: 768},
+    //viewportSize:{width: 1200, height: 800},
     waitTimeout:40000
 });
 
@@ -48,7 +48,7 @@ casper.checkPageSize = function(response,pageSize){
 
     var normalObject = JSON.parse(PageInfo[response.index]);
 
-    console.log(pageSize,normalObject['size']* 0.9);
+    console.log("拉过一屏图强以后页面大小:" + pageSize,normalObject['size']* 0.9);
 
     if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
@@ -72,11 +72,34 @@ casper.throwError = function(response){
     
 }
 
+casper.selectMode = function (response){
+    if(this.exists('.J_scroll_wallbox')){
+        this.scrollToBottom();
+        this.checkAjax(response);
+    }else{
+        this.getContent(response);
+    }   
+}
+
+casper.checkAjax = function(response){
+    
+    this.waitFor(function(){
+        return this.evaluate(function(){
+            console.log(document.getElementsByClassName('iwf').length);
+            return document.getElementsByClassName('iwf').length > 40;
+        });
+    }); 
+
+    this.getContent(response);
+
+}
+
+
 casper.checkPage = function(response) {
     if(response.status==200){
-        this.echo('Page title: ' + this.getTitle());
-        this.echo(this.getPageContent().length);
-        this.getContent(response);
+        this.echo('页面title: ' + this.getTitle());
+        this.echo('首屏页面大小:' + this.getPageContent().length);
+        this.selectMode(response);
     }else{
         this.throwError(response);
     }
