@@ -50,7 +50,8 @@ function curl(){
 
 function getFiles(){
 	var filePath = path.join(nowPath,"files","fileList_pre1.js");
-	var fileList = fs.readFileSync(filePath,"UTF-8").split('\n');
+	var fileListStr = fs.readFileSync(filePath,"UTF-8");
+    var fileList = fileListStr.replace(/\n*$/,'').split('\n');
 	return fileList;
 }
 

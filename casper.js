@@ -13,7 +13,12 @@ var casper = require("casper").create({
     logLevel: "debug",   // Only "info" level messages will be logged
     verbose: true,
     viewportSize:{width: 1200, height: 800},
-    waitTimeout:40000
+    waitTimeout:20000,
+    onWaitTimeout:function(time){
+        this.echo("等待超时！！！！");
+        casper.savePicture();
+        this.exit();
+    }
 });
 
 var pathStr = casper.cli.get(0);
@@ -52,7 +57,7 @@ casper.checkPageSize = function(response,pageSize){
 
     if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
-        this.savePicture();//注释掉，页面正常不用截图
+        //this.savePicture();注释掉，页面正常不用截图
     }else{
         this.throwError(response);
     }
@@ -66,7 +71,7 @@ casper.savePicture = function(){
 }
 
 casper.throwError = function(response){
-
+    this.echo("页面大小小于初始化的80%！！！！");
     this.savePicture();
     //请求
     
@@ -85,7 +90,15 @@ casper.checkAjax = function(response){
     
     this.waitFor(function(){
         return this.evaluate(function(){
-            return document.getElementsByClassName('iwf').length > 40;
+            var step = 500;
+            var currentTop = document.body.scrollTop;
+            var _scrollTop = currentTop;
+            currentTop += step;
+            window.scrollTo(0,currentTop);
+            var tuanItemLength = document.getElementsByClassName('tuan_goods_single').length||document.getElementsByClassName('tuan_goods_single_09292300').length;
+            var wallItemLength = (document.getElementsByClassName('iwf').length || tuanItemLength);
+            console.log("scrollTop:"+currentTop,"item数:"+wallItemLength);
+            return wallItemLength > 40;
         });
     }); 
 
