@@ -9,10 +9,10 @@ var nowPath = __dirname;
 var rule = new schedule.RecurrenceRule();
 
 //rule.hour = 14;
-//rule.minute = 27;
+rule.minute = [0,20,40];
 //rule.second = 0;
 
-//var scheduleJob = schedule.scheduleJob(rule, function(){
+var scheduleJob = schedule.scheduleJob(rule, function(){
 	logDate("start from");
 
 	var fileList = getFiles();
@@ -42,20 +42,18 @@ var rule = new schedule.RecurrenceRule();
 	child.on('exit', function (code) {
 	    console.log('child process exited with code ' + code);
 	});
-//}
 
-function curl(){
-	
-}
+    function getFiles(){
+        var filePath = path.join(nowPath,"files","fileList_pre1.js");
+        var fileListStr = fs.readFileSync(filePath,"UTF-8");
+        var fileList = fileListStr.replace(/\n*$/,'').split('\n');
+        return fileList;
+    }
 
-function getFiles(){
-	var filePath = path.join(nowPath,"files","fileList_pre1.js");
-	var fileListStr = fs.readFileSync(filePath,"UTF-8");
-    var fileList = fileListStr.replace(/\n*$/,'').split('\n');
-	return fileList;
-}
+    function logDate(flag){
+        var filePath = nowPath + '/logData.log';
+        fs.appendFile(filePath,flag+" "+new Date()+"\n");
+    }
+});
 
-function logDate(flag){
-    var filePath = nowPath + '/logData.log';
-    fs.appendFile(filePath,flag+" "+new Date()+"\n");
-}
+

@@ -12,7 +12,7 @@ var casper = require("casper").create({
     },
     logLevel: "debug",   // Only "info" level messages will be logged
     verbose: true,
-    viewportSize:{width: 1200, height: 800},
+    //viewportSize:{width: 1200, height: 800},
     waitTimeout:20000,
     onWaitTimeout:function(time){
         this.echo("等待超时！！！！");
@@ -47,7 +47,7 @@ casper.getContent = function(response){
             this.checkPageSize(response,pageSize);
         }
     });
-}
+};
 
 casper.checkPageSize = function(response,pageSize){
 
@@ -57,25 +57,39 @@ casper.checkPageSize = function(response,pageSize){
 
     if(pageSize > normalObject['size'] * 0.9){
         this.echo("页面正常!");
+        //this.throwError(response);
         //this.savePicture();注释掉，页面正常不用截图
     }else{
         this.throwError(response);
     }
-}
+};
 
 casper.savePicture = function(){
-    this.capture('./errorImage/'+this.page.title + new Date(), undefined,{
-        format: 'jpg',
+    this.capture('./errorImage/'+this.page.title + new Date() + '.jpg', undefined,{
         quality: 60
     });
-}
+};
 
 casper.throwError = function(response){
-    this.echo("页面大小小于初始化的80%！！！！");
-    this.savePicture();
+    var txt = '';
+    if(response.status != 200){
+        txt = '页面状态码:'+response.status
+    }else{
+        txt = '页面大小小于初始化的80%！！！！'
+    }
+    this.echo(txt);
     //请求
-    
-}
+    this.thenOpen('http://www.mogujie.com/haitao_monitor_index/alarmTest',{
+        method: "post",
+        data: {
+            url: response.url,
+            txt: txt
+        }
+    },function(data) {
+        this.debugPage();
+    });
+    this.savePicture();
+};
 
 casper.selectMode = function (response){
     if(this.exists('.J_scroll_wallbox')){
@@ -84,7 +98,7 @@ casper.selectMode = function (response){
     }else{
         this.getContent(response);
     }   
-}
+};
 
 casper.checkAjax = function(response){
     
@@ -101,10 +115,8 @@ casper.checkAjax = function(response){
             return wallItemLength > 40;
         });
     }); 
-
     this.getContent(response);
-
-}
+};
 
 
 casper.checkPage = function(response) {
@@ -115,7 +127,7 @@ casper.checkPage = function(response) {
     }else{
         this.throwError(response);
     }
-}
+};
 
 casper.initPageSize = function(){
     if (fs.exists(resultPath)) {
@@ -129,7 +141,7 @@ casper.initPageSize = function(){
     }else{
         fs.write(resultPath,'','w');
     }
-}
+};
 
 casper.start().then(function(){
 
