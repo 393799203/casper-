@@ -82,8 +82,7 @@ casper.throwError = function(response){
     this.thenOpen('http://www.mogujie.com/haitao_monitor_index/alarmTest',{
         method: "post",
         data: {
-            url: response.url,
-            txt: txt
+            url: response.url + '&err=' + txt
         }
     },function(data) {
         this.debugPage();
